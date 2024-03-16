@@ -33,6 +33,10 @@ export default function Home() {
     else setExcludedNumbers([]);
   };
 
+  const removeExcludedNumber = (numToRemove: number) => {
+    setExcludedNumbers((prev) => prev.filter((num) => num !== numToRemove));
+  };
+
   const clear = () => {
     setChosenNumber(null);
     setExcludedNumbers([]);
@@ -106,9 +110,15 @@ export default function Home() {
             {excludedNumbers.slice().reverse().map((num, index) => (
               <div
                 key={index}
-                className="card p-4 bg-gray-200 text-gray-800 font-semibold text-center"
+                className="card p-4 bg-gray-200 text-gray-800 font-semibold text-center relative"
               >
                 {num}
+                <button
+                  className="absolute right-2 top-2 bg-red-500 text-white px-2 py-1 rounded-full hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
+                  onClick={() => removeExcludedNumber(num)}
+                >
+                  X
+                </button>
               </div>
             ))}
           </div>
