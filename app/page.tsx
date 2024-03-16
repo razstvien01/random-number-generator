@@ -1,13 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [start, setStart] = useState<number>(1);
-  const [end, setEnd] = useState<number>(10);
-  const [excludeChosen, setExcludeChosen] = useState<boolean>(false);
-  const [chosenNumber, setChosenNumber] = useState<number | null>(null);
-  const [excludedNumbers, setExcludedNumbers] = useState<number[]>([]);
+  const [start, setStart] = useState<number>(() => {
+    const savedStart = localStorage.getItem("start");
+    return savedStart ? parseInt(savedStart) : 1;
+  });
+  const [end, setEnd] = useState<number>(() => {
+    const savedEnd = localStorage.getItem("end");
+    return savedEnd ? parseInt(savedEnd) : 10;
+  });
+  const [excludeChosen, setExcludeChosen] = useState<boolean>(() => {
+    const savedExcludeChosen = localStorage.getItem("excludeChosen");
+    return savedExcludeChosen ? JSON.parse(savedExcludeChosen) : false;
+  });
+  const [chosenNumber, setChosenNumber] = useState<number | null>(() => {
+    const savedChosenNumber = localStorage.getItem("chosenNumber");
+    return savedChosenNumber ? parseInt(savedChosenNumber) : null;
+  });
+  const [excludedNumbers, setExcludedNumbers] = useState<number[]>(() => {
+    const savedExcludedNumbers = localStorage.getItem("excludedNumbers");
+    return savedExcludedNumbers ? JSON.parse(savedExcludedNumbers) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("start", start.toString());
+    localStorage.setItem("end", end.toString());
+    localStorage.setItem("excludeChosen", JSON.stringify(excludeChosen));
+    localStorage.setItem("chosenNumber", chosenNumber?.toString() ?? "");
+    localStorage.setItem("excludedNumbers", JSON.stringify(excludedNumbers));
+  }, [start, end, excludeChosen, chosenNumber, excludedNumbers]);
 
   const generateRandomNumber = () => {
     const range = Array.from(
